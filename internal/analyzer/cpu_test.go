@@ -7,9 +7,9 @@ import (
 )
 
 func makeCPUProfile(samples []struct {
-	fn    string
-	file  string
-	ns    int64
+	fn   string
+	file string
+	ns   int64
 }) *profile.Profile {
 	p := &profile.Profile{
 		SampleType: []*profile.ValueType{
