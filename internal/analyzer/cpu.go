@@ -28,9 +28,12 @@ type CPUReport struct {
 
 // AnalyzeCPU analyses a CPU profile and returns the top hot functions.
 func AnalyzeCPU(p *profile.Profile, topN int) (*CPUReport, error) {
-	idx := parser.ValueIndex(p, "cpu")
-	if idx == 0 {
-		idx = parser.ValueIndex(p, "samples")
+	idx, ok := parser.ValueIndex(p, "cpu")
+	if !ok {
+		idx, ok = parser.ValueIndex(p, "samples")
+		if !ok {
+			idx = 0
+		}
 	}
 
 	type funcKey struct{ name, file string }

@@ -32,14 +32,15 @@ type HeapReport struct {
 // AnalyzeHeap analyses a heap profile and returns the top allocators with recommendations.
 func AnalyzeHeap(p *profile.Profile, topN int) (*HeapReport, error) {
 	// Prefer alloc_space for finding leak candidates; fall back to inuse_space.
-	valueType := "alloc_space"
-	idx := parser.ValueIndex(p, valueType)
 	profileType := "alloc"
-	if idx == 0 && len(p.SampleType) > 0 && p.SampleType[0].Type == "inuse_space" {
-		valueType = "inuse_space"
+	idx, ok := parser.ValueIndex(p, "alloc_space")
+	if !ok {
+		idx, ok = parser.ValueIndex(p, "inuse_space")
 		profileType = "inuse"
 	}
-	_ = valueType
+	if !ok {
+		return nil, fmt.Errorf("profile contains neither alloc_space nor inuse_space sample type")
+	}
 
 	type funcKey struct{ name, file string }
 	flat := make(map[funcKey]int64)

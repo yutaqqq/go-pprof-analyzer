@@ -37,8 +37,10 @@ func Compare(before, after *profile.Profile, topN int) (*Report, error) {
 		return nil, err
 	}
 
-	beforeFlat := flatValues(before, parser.ValueIndex(before, vType))
-	afterFlat := flatValues(after, parser.ValueIndex(after, vType))
+	beforeIdx, _ := parser.ValueIndex(before, vType)
+	afterIdx, _ := parser.ValueIndex(after, vType)
+	beforeFlat := flatValues(before, beforeIdx)
+	afterFlat := flatValues(after, afterIdx)
 
 	all := make(map[funcKey]struct{})
 	for k := range beforeFlat {

@@ -27,7 +27,10 @@ type LeakCandidate struct {
 
 // AnalyzeGoroutines returns goroutine groups sorted by count descending.
 func AnalyzeGoroutines(p *profile.Profile) ([]GoroutineEntry, error) {
-	idx := parser.ValueIndex(p, "goroutine")
+	idx, ok := parser.ValueIndex(p, "goroutine")
+	if !ok {
+		idx = 0
+	}
 
 	type stackKey string
 	counts := make(map[stackKey]int)

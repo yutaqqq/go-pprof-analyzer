@@ -24,14 +24,14 @@ func Load(path string) (*profile.Profile, error) {
 }
 
 // ValueIndex returns the index in Sample.Value for the given type name.
-// Returns 0 if not found.
-func ValueIndex(p *profile.Profile, typeName string) int {
+// The second return value is false if the type is not present in the profile.
+func ValueIndex(p *profile.Profile, typeName string) (int, bool) {
 	for i, st := range p.SampleType {
 		if st.Type == typeName {
-			return i
+			return i, true
 		}
 	}
-	return 0
+	return -1, false
 }
 
 // DetectType guesses the profile type from its sample type names.
