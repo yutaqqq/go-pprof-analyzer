@@ -1,0 +1,6 @@
+/pprof-analyzer
+*.test
+*.out
+*.pb.gz
+vendor/
+.env
